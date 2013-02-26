@@ -757,6 +757,7 @@ class IMPORT_OT_directx_x(bpy.types.Operator):
     bl_options = {'UNDO'}
     
     filepath = StringProperty(subtype='FILE_PATH')
+    filter_glob = StringProperty(default="*.x", options={'HIDDEN'})
 
     #Coordinate System
     CoordinateSystem = EnumProperty(

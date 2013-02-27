@@ -755,7 +755,8 @@ class IMPORT_OT_directx_x(bpy.types.Operator):
 #    bl_region_type = "WINDOW"
     bl_options = {'UNDO'}
     
-    filepath = StringProperty(subtype='FILE_PATH')
+    files = CollectionProperty(type=bpy.types.OperatorFileListElement, options={'HIDDEN', 'SKIP_SAVE'})
+    directory = StringProperty(maxlen=1024, subtype='FILE_PATH', options={'HIDDEN', 'SKIP_SAVE'})
     filter_glob = StringProperty(default="*.x", options={'HIDDEN'})
 
     #Coordinate System
@@ -776,7 +777,11 @@ class IMPORT_OT_directx_x(bpy.types.Operator):
                     CoordinateSystem=self.CoordinateSystem,
                     UpwardAxis=self.UpwardAxis
                  )
-        importXFile(self.filepath, config)
+        for file in self.files:
+            try:
+                importXFile(self.directory + "/" + file.name, config)
+            except:
+                print("import '" + self.directory + "/" + file.name + "' failed")
         return {'FINISHED'}
 
     def invoke(self, context, event):

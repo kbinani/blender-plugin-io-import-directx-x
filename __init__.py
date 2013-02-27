@@ -559,26 +559,25 @@ class Parser:
 
         # set material index for each faces
         if meshData.faceMaterialIndex != None:
-            for i in range(len(me.faces)):
-                if i < len( meshData.faceMaterialIndex):
-                    me.faces[i].material_index = meshData.faceMaterialIndex[i]
+            for i in range(len(meshData.faces)):
+                if i < len(meshData.faceMaterialIndex):
+                    me.polygons[i].material_index = meshData.faceMaterialIndex[i]
                 else:
-                    me.faces[i].material_index = meshData.faceMaterialIndex[-1]
+                    me.polygons[i].material_index = meshData.faceMaterialIndex[-1]
 
         if meshData.texCoords != None:
-            uvs = me.uv_textures.new("TextureCoords")
-            for i in range(len(me.faces)):
-                vc = uvs.data[i]
-#                fv = me.faces[i].vertices
-                fv = meshData.faces[i]
-                vc.uv1 = meshData.texCoords[fv[0]]
-                vc.uv2 = meshData.texCoords[fv[1]]
-                vc.uv3 = meshData.texCoords[fv[2]]
-                vc.uv4 = meshData.texCoords[fv[3]]
+            me.uv_textures.new("TextureCoords")
+            uvs = me.uv_layers.active
+            index = 0
+            for face in meshData.faces:
+                for vertexIndex in face:
+                    vc = uvs.data[index]
+                    vc.uv = meshData.texCoords[vertexIndex]
+                    index += 1
 
         if meshData.vertexColors != None:
             vcol = me.vertex_colors.new("VertexColor")
-            for i in range(len(me.faces)):
+            for i in range(len(meshData.faces)):
                 vc = vcol.data[i]
 #                fv = me.faces[i].vertices
                 fv = meshData.faces[i]
@@ -597,9 +596,9 @@ class Parser:
         # this work must be here.
         if "TextureCoords" in me.uv_textures.keys():
             uvs = me.uv_textures["TextureCoords"]
-            for i in range(len(me.faces)):
-                if me.materials[me.faces[i].material_index].texture_slots[0]:
-                    uvs.data[i].image = me.materials[me.faces[i].material_index].texture_slots[0].texture.image
+            for i in range(len(me.polygons)):
+                if me.materials[me.polygons[i].material_index].texture_slots[0]:
+                    uvs.data[i].image = me.materials[me.polygons[i].material_index].texture_slots[0].texture.image
     
         me.update()
     

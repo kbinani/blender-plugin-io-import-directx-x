@@ -18,9 +18,9 @@
 
 bl_info = {
     "name": "Import DirectX X Format (.x)",
-    "author": "T.Yonemori",
-    "version": (0, 5, 0),
-    "blender": (2, 6, 0),
+    "author": "T.Yonemori, B.Okada",
+    "version": (0, 5, 1),
+    "blender": (2, 66, 0),
     "location": "File > Import > DirectX (.x)",
     "description": "Import files in the DirectX X format (.x)",
     "warning": "",
